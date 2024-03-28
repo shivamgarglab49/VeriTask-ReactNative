@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "VeriTaskReactN",
-    "slug": "VeriTaskReactN",
+    "name": "VeriTask",
+    "slug": "VeriTask-ReactNative",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,22 +9,27 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1B2124"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "backgroundColor": "#1B2124",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.satguru.veritask"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "72a8ec1c-f75a-499a-941e-643ffa514b71"
+      }
     }
   }
 }

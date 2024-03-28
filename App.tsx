@@ -1,20 +1,73 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
 
-export default function App() {
+import OptionMenu from "./screens/commons/OptionMenu";
+import DealsComponent from "./screens/deal/DealsComponent";
+import UsersComponent from "./screens/users/UsersComponent";
+import DealDetailComponent from "./screens/details/DealDetailComponent";
+import ConfirmationComponent from "./screens/confirmation/ConfirmationComponent";
+
+import { colors } from "./utils/Constants";
+import { StatusBar } from "expo-status-bar";
+import { useUserLogin } from "./hooks/useUserLogin";
+import { RootStackParamList } from "./hooks/types";
+import { NavigationContainer } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function App() {
+  const { isChecking, currentUserState } = useUserLogin();
+
+  if (isChecking) {
+    return <></>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="light" />
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={currentUserState.user ? "Deals" : "Users"}
+            screenOptions={{
+              headerTintColor: colors.fcl_content,
+              headerShadowVisible: true,
+              headerBackTitleVisible: false,
+              headerStyle: {
+                backgroundColor: colors.fcl_fill_container,
+              },
+            }}
+          >
+            <Stack.Screen
+              name={"Users"}
+              component={UsersComponent}
+              options={{ title: "Login as" }}
+            />
+            <Stack.Screen
+              name={"Deals"}
+              component={DealsComponent}
+              options={{ title: "Sales", headerRight: () => <OptionMenu /> }}
+            />
+            <Stack.Screen
+              name={"DealsDetail"}
+              component={DealDetailComponent}
+              options={{ title: "Sales-Details" }}
+            />
+
+            <Stack.Screen
+              name={"Confirmation"}
+              component={ConfirmationComponent}
+              options={{ title: "" }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
