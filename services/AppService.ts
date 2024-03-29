@@ -1,7 +1,12 @@
 import { Helper } from "../utils/Helper";
 import { Platform } from "react-native";
-import { StorageHelper } from "../utils/StorageHelper";
-import { Deal, DealUpdateRequestBody, Login, Users } from "../hooks/types";
+import {
+  Deal,
+  Login,
+  Users,
+  RejectReason,
+  DealUpdateRequestBody,
+} from "../hooks/types";
 
 import axios, { AxiosRequestConfig } from "axios";
 axios.defaults.baseURL = "https://veritask.vercel.app/api"; // base-url
@@ -60,6 +65,14 @@ export const userLogin = async (userId: string) => {
     method: "post",
   };
   return await axiosWrapper<Login>(config);
+};
+
+export const rejectReasons = async () => {
+  const config = {
+    url: "/reject-reasons",
+    method: "get",
+  };
+  return await axiosWrapper<RejectReason[]>(config);
 };
 
 const axiosWrapper = async <T>(config: AxiosRequestConfig): Promise<T> => {

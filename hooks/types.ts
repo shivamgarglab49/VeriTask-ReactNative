@@ -12,6 +12,7 @@ export enum VeriTaskQueries {
   Users = "user-list",
   Login = "login",
   StatusUpdate = "deal-status-update",
+  RejectReasons = "reject-reasons",
 }
 
 export interface Users {
@@ -40,6 +41,12 @@ export interface Login {
   token: string;
   userId: string;
   deviceId: string;
+}
+
+export interface RejectReason {
+  id: string;
+  key: string;
+  description: string;
 }
 
 export interface Deal {

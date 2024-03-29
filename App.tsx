@@ -10,8 +10,8 @@ import { colors } from "./utils/Constants";
 import { StatusBar } from "expo-status-bar";
 import { useUserLogin } from "./hooks/useUserLogin";
 import { RootStackParamList } from "./hooks/types";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { NavigationContainer } from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -27,46 +27,48 @@ function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style="light" />
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={currentUserState.user ? "Deals" : "Users"}
-            screenOptions={{
-              headerTintColor: colors.fcl_content,
-              headerShadowVisible: true,
-              headerBackTitleVisible: false,
-              headerStyle: {
-                backgroundColor: colors.fcl_fill_container,
-              },
-            }}
-          >
-            <Stack.Screen
-              name={"Users"}
-              component={UsersComponent}
-              options={{ title: "Login as" }}
-            />
-            <Stack.Screen
-              name={"Deals"}
-              component={DealsComponent}
-              options={{ title: "Sales", headerRight: () => <OptionMenu /> }}
-            />
-            <Stack.Screen
-              name={"DealsDetail"}
-              component={DealDetailComponent}
-              options={{ title: "Sales-Details" }}
-            />
+    <ActionSheetProvider>
+      <>
+        <StatusBar style="light" />
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName={currentUserState.user ? "Deals" : "Users"}
+              screenOptions={{
+                headerTintColor: colors.fcl_content,
+                headerShadowVisible: true,
+                headerBackTitleVisible: false,
+                headerStyle: {
+                  backgroundColor: colors.fcl_fill_container,
+                },
+              }}
+            >
+              <Stack.Screen
+                name={"Users"}
+                component={UsersComponent}
+                options={{ title: "Login as" }}
+              />
+              <Stack.Screen
+                name={"Deals"}
+                component={DealsComponent}
+                options={{ title: "Sales", headerRight: () => <OptionMenu /> }}
+              />
+              <Stack.Screen
+                name={"DealsDetail"}
+                component={DealDetailComponent}
+                options={{ title: "Sales-Details" }}
+              />
 
-            <Stack.Screen
-              name={"Confirmation"}
-              component={ConfirmationComponent}
-              options={{ title: "" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+              <Stack.Screen
+                name={"Confirmation"}
+                component={ConfirmationComponent}
+                options={{ title: "" }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </QueryClientProvider>
+      </>
+    </ActionSheetProvider>
   );
 }
 

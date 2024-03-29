@@ -6,31 +6,89 @@ import ProductItem from "./ProductItem";
 import useDealDetail from "../../hooks/useDealDetail";
 import ProgressDialog from "../commons/ProgressDialog";
 import useStatusUpdate from "../../hooks/useStatusUpdate";
+import useRejectReasons from "../../hooks/useRejectReasons";
 import DealStatusChangeComponent from "./DealStatusChangeComponent";
 
 import { colors } from "../../utils/Constants";
 import { Helper } from "../../utils/Helper";
 import { useUserLogin } from "../../hooks/useUserLogin";
-import { DealDetailsScreenProps } from "../../hooks/types";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { DealDetailsScreenProps, RejectReason } from "../../hooks/types";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 const DealDetailComponent = ({ navigation, route }: DealDetailsScreenProps) => {
+  const { showActionSheetWithOptions: rejectActionSheet } = useActionSheet();
+  const { showActionSheetWithOptions: approveActionSheet } = useActionSheet();
+
   const { currentUserState } = useUserLogin();
 
   const dealDetailQuery = useDealDetail(route.params.dealId);
+  const rejectReasonsQuery = useRejectReasons();
   const dealStatusChangeQuery = useStatusUpdate(route.params.dealId);
 
-  const onApproveOrRejectHandler = (isApproved: boolean) => {
-    dealStatusChangeQuery.mutate({
-      reason: isApproved ? "" : "Please make requested changes",
-      status: isApproved ? "Approved" : "Rejected",
-      approverId: currentUserState.user!.id,
-    });
+  const onApprovedHandler = async () => {
+    const options = ["Yes", "No"];
+    const cancelButtonIndex = options.length - 1;
+
+    approveActionSheet(
+      {
+        message: "Are you sure you want to approve this deal ?",
+        options,
+        cancelButtonIndex,
+      },
+      (selectedIndex?: number) => {
+        switch (selectedIndex) {
+          case cancelButtonIndex:
+            break;
+
+          default:
+            dealStatusChangeQuery.mutate({
+              reason: "",
+              status: "Approved",
+              approverId: currentUserState.user!.id,
+            });
+            break;
+        }
+      }
+    );
   };
 
-  const onApproveOrRejectHandlerCached = useCallback(onApproveOrRejectHandler, [
-    currentUserState,
-  ]);
+  const onRejectedHandler = async () => {
+    let rejectReasonList: RejectReason[] = rejectReasonsQuery.data ?? [];
+
+    if (!rejectReasonsQuery.isSuccess) {
+      rejectReasonList = (await rejectReasonsQuery.refetch())?.data ?? [];
+    }
+    if (rejectReasonList.length === 0) {
+      console.log("please try again");
+      return;
+    }
+    const reasons = rejectReasonList.map((item) => item.description);
+    const options = [...reasons, "Cancel"];
+    const cancelButtonIndex = options.length - 1;
+
+    rejectActionSheet(
+      {
+        title: "Select reason for rejection",
+        options,
+        cancelButtonIndex,
+      },
+      (selectedIndex?: number) => {
+        switch (selectedIndex) {
+          case cancelButtonIndex:
+            break;
+
+          default:
+            dealStatusChangeQuery.mutate({
+              reason: options[selectedIndex!],
+              status: "Rejected",
+              approverId: currentUserState.user!.id,
+            });
+            break;
+        }
+      }
+    );
+  };
 
   useEffect(() => {
     if (dealStatusChangeQuery.isSuccess) {
@@ -162,7 +220,13 @@ const DealDetailComponent = ({ navigation, route }: DealDetailsScreenProps) => {
           {currentUserState.user?.id === dealDetailQuery.data.approverId &&
             dealDetailQuery.data.status === "Pending" && (
               <DealStatusChangeComponent
-                onSelection={onApproveOrRejectHandlerCached}
+                onSelection={(isApproved: boolean) => {
+                  if (isApproved) {
+                    onApprovedHandler();
+                  } else {
+                    onRejectedHandler();
+                  }
+                }}
               />
             )}
           {currentUserState.user?.id !== dealDetailQuery.data.approverId &&

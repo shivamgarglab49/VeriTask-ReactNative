@@ -40,7 +40,11 @@ const OptionMenu = () => {
 export default OptionMenu;
 
 const styles = StyleSheet.create({
-  parentProps: { flexDirection: "row", alignItems: "center" },
+  parentProps: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
   imageProps: {
     width: 16,
     height: 16,
