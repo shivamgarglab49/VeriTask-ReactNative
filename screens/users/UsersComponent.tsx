@@ -8,12 +8,15 @@ import useLoginQuery from "../../hooks/useLoginQuery";
 
 import { colors } from "../../utils/Constants";
 import { useUserLogin } from "../../hooks/useUserLogin";
-import { UsersScreenProps } from "../../hooks/types";
+import { UserLoginState, UsersScreenProps } from "../../hooks/types";
 import { View, FlatList, StyleSheet } from "react-native";
 
 const UsersComponent = ({ navigation }: UsersScreenProps) => {
-  const { isLoginRequired, onPostLogin } = useUserLogin();
-  const usersQuery = useUsers("manager", isLoginRequired);
+  const { currentUserState, onPostLogin } = useUserLogin();
+  const usersQuery = useUsers(
+    "manager",
+    currentUserState.state === UserLoginState.LoginRequired
+  );
   const userLoginQuery = useLoginQuery();
 
   const retry = () => {
@@ -23,11 +26,15 @@ const UsersComponent = ({ navigation }: UsersScreenProps) => {
   useEffect(() => {
     if (userLoginQuery.isSuccess) {
       onPostLogin(userLoginQuery.variables);
-      navigation.replace("Deals");
     } else if (userLoginQuery.isError) {
       userLoginQuery.reset();
     }
   }, [userLoginQuery]);
+
+  useEffect(() => {
+    currentUserState.state === UserLoginState.AlreadyLoggedIn &&
+      navigation.replace("Deals");
+  }, [currentUserState]);
 
   return (
     <View style={styles.parentProps}>
