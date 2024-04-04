@@ -2,7 +2,7 @@ import React from "react";
 
 import { Users } from "../../hooks/types";
 import { colors } from "../../utils/Constants";
-import { Text, View, Image, Pressable, StyleSheet } from "react-native";
+import { Text, View, Pressable, StyleSheet } from "react-native";
 
 type UserItemProps = {
   item: Users;
@@ -13,22 +13,14 @@ const UsersItem: React.FC<UserItemProps> = (props) => {
   return (
     <View style={styles.parentProps}>
       <Pressable
-        android_ripple={{ color: "#343d40" }}
+        android_ripple={{ color: "#D3D3D3" }}
         style={styles.cardProps}
         onPress={props.onItemClick.bind(this, props.item)}
       >
-        <Image
-          style={styles.imageProps}
-          source={require("../../assets/images/profile.png")}
-        />
         <View style={styles.userProps}>
           <Text style={styles.nameProps}>{props.item.name}</Text>
           <Text style={styles.emailProps}>{props.item.email}</Text>
         </View>
-        <Image
-          style={styles.rightArrowProps}
-          source={require("../../assets/images/right_arrow.png")}
-        />
       </Pressable>
     </View>
   );
@@ -38,39 +30,26 @@ export default UsersItem;
 
 const styles = StyleSheet.create({
   parentProps: {
-    borderRadius: 8,
+    borderRadius: 4,
     overflow: "hidden",
-    marginTop: 12,
   },
   cardProps: {
-    backgroundColor: colors.fcl_fill_component,
+    backgroundColor: colors.fcl_fill_container,
     flexDirection: "row",
-    height: 80,
-    padding: 8,
-    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 4,
     alignItems: "center",
   },
-  imageProps: {
-    width: 50,
-    backgroundColor: "white",
-    overflow: "hidden",
-    borderRadius: 25,
-    height: 50,
-    borderColor: "black",
-    borderWidth: 2,
-    marginHorizontal: 12,
-  },
-  rightArrowProps: {
-    width: 12,
-    height: 12,
-    marginHorizontal: 12,
-  },
   nameProps: {
-    fontSize: 20,
+    fontSize: 14,
+    lineHeight: 14,
+    marginBottom: 8,
     color: colors.fcl_content,
   },
   emailProps: {
-    fontSize: 16,
+    fontSize: 12,
+    lineHeight: 12,
     color: colors.fcl_content_subtle,
   },
   userProps: {

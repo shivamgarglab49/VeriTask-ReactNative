@@ -7,7 +7,7 @@ import useDealDetail from "../../hooks/useDealDetail";
 import ProgressDialog from "../commons/ProgressDialog";
 import useStatusUpdate from "../../hooks/useStatusUpdate";
 import useRejectReasons from "../../hooks/useRejectReasons";
-import DealStatusChangeComponent from "./DealStatusChangeComponent";
+import ButtonsComponent from "../commons/ButtonsComponent";
 
 import { colors } from "../../utils/Constants";
 import { Helper } from "../../utils/Helper";
@@ -219,7 +219,9 @@ const DealDetailComponent = ({ navigation, route }: DealDetailsScreenProps) => {
           />
           {currentUserState.user?.id === dealDetailQuery.data.approverId &&
             dealDetailQuery.data.status === "Pending" && (
-              <DealStatusChangeComponent
+              <ButtonsComponent
+                okButtonText="Approve"
+                cancelButtonText="Reject"
                 onSelection={(isApproved: boolean) => {
                   if (isApproved) {
                     onApprovedHandler();

@@ -7,6 +7,7 @@ import ProgressBar from "../commons/ProgressBar";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
 import { colors } from "../../utils/Constants";
+import { useUserLogin } from "../../hooks/useUserLogin";
 import { useQueryClient } from "@tanstack/react-query";
 import { DealsScreenProps, VeriTaskQueries } from "../../hooks/types";
 import { View, FlatList, StyleSheet } from "react-native";
@@ -16,16 +17,21 @@ const TAB_ITEMS = ["Pending", "Approved", "Rejected"];
 const DealsComponent = ({ navigation }: DealsScreenProps) => {
   const [selectedItem, setSelectedItem] = useState(0);
   const queryClient = useQueryClient();
+  const { currentUserState } = useUserLogin();
 
   const dealsApi = useDeals();
 
   const filteredList = useMemo(() => {
     const currentSelectedTabText = TAB_ITEMS[selectedItem];
-    return (dealsApi.data ?? []).filter(
+    const deals = (dealsApi.data ?? []).filter(
       (deal) =>
         deal.status.toLowerCase() === currentSelectedTabText.toLowerCase()
     );
-  }, [dealsApi, selectedItem]);
+    return deals.filter(
+      (deal) =>
+        currentUserState.user && deal.approverId === currentUserState.user.id
+    );
+  }, [dealsApi, selectedItem, currentUserState]);
 
   const retry = () => {
     queryClient.removeQueries({ queryKey: [VeriTaskQueries.Deals] });

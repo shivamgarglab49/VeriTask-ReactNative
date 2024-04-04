@@ -12,4 +12,7 @@ export const colors = {
   fcl_primary_300: "#24CAEC",
   fcl_status_success_300: "#14B89C",
   fcl_secondary_500: "#F86F53",
+  fcl_content_plus: "#ACBAC5",
 };
+
+export const PASSWORD = "12345678";

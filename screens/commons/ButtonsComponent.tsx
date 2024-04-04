@@ -1,15 +1,19 @@
 import React from "react";
-import CustomButton from "../commons/CustomButton";
+import CustomButton from "./CustomButton";
 
 import { colors } from "../../utils/Constants";
 import { View, StyleSheet } from "react-native";
 
-type DealStatusChangeComponentProps = {
-  onSelection: (isApproved: boolean) => any;
+type ButtonsComponentProps = {
+  okButtonText: string;
+  cancelButtonText: string;
+  onSelection: (isOkButtonPressed: boolean) => any;
 };
 
-const DealStatusChangeComponent: React.FC<DealStatusChangeComponentProps> = ({
+const ButtonsComponent: React.FC<ButtonsComponentProps> = ({
   onSelection,
+  okButtonText,
+  cancelButtonText,
 }) => {
   return (
     <View style={styles.approveOrRejectParentProps}>
@@ -18,7 +22,7 @@ const DealStatusChangeComponent: React.FC<DealStatusChangeComponentProps> = ({
           onPress={() => {
             onSelection(false);
           }}
-          text="Reject"
+          text={cancelButtonText}
           rippleColor="#cccccc"
           buttonStyle={styles.rejectButtonProps}
           textStyle={styles.rejectTextProps}
@@ -29,7 +33,7 @@ const DealStatusChangeComponent: React.FC<DealStatusChangeComponentProps> = ({
           onPress={() => {
             onSelection(true);
           }}
-          text="Approve"
+          text={okButtonText}
           rippleColor="#cccccc"
           buttonStyle={styles.approveButtonProps}
           textStyle={styles.approveTextProps}
@@ -39,7 +43,7 @@ const DealStatusChangeComponent: React.FC<DealStatusChangeComponentProps> = ({
   );
 };
 
-export default React.memo(DealStatusChangeComponent);
+export default React.memo(ButtonsComponent);
 
 const styles = StyleSheet.create({
   approveOrRejectParentProps: {

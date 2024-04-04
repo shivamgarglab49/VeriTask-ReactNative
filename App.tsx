@@ -46,7 +46,7 @@ function App() {
               <Stack.Screen
                 name={"Users"}
                 component={UsersComponent}
-                options={{ title: "Login as" }}
+                options={{ title: "Login as", headerShown: false }}
               />
               <Stack.Screen
                 name={"Deals"}
