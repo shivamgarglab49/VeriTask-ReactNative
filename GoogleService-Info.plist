@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyChP_HyFzYvNhDLlAIrgsnMwemUhB2c_j8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>743396834881</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.apexmonkeyboy.Veritask</string>
+	<key>PROJECT_ID</key>
+	<string>veritask-a9a2d</string>
+	<key>STORAGE_BUCKET</key>
+	<string>veritask-a9a2d.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:743396834881:ios:fc9d87c11cf899604610c0</string>
+</dict>
+</plist>

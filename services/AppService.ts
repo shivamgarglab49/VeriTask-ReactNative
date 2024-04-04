@@ -1,5 +1,5 @@
 import { Helper } from "../utils/Helper";
-import { Platform } from "react-native";
+import { StorageHelper } from "../utils/StorageHelper";
 import {
   Deal,
   Login,
@@ -54,11 +54,12 @@ export const fetchUsers = async (role: string) => {
 
 export const userLogin = async (userId: string) => {
   const data = {
-    os: Platform.OS === "android" ? "Android" : "iOS",
+    os: Helper.getOs(),
     userId: userId,
-    token: "29945fe4-243f-43fd-a53c-53465d5121aa",
-    deviceId: await Helper.getUniqueId(),
+    token: await StorageHelper.getToken(),
+    deviceId: await StorageHelper.getDeviceId(),
   };
+  console.log("userLogin called with :->>>> ", data);
   const config = {
     url: "/login",
     data: data,

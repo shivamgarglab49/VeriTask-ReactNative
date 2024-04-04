@@ -16,3 +16,4 @@ export const colors = {
 };
 
 export const PASSWORD = "12345678";
+export const NATIVE_PUSH_ENABLED = true;

@@ -7,12 +7,29 @@ import { Helper } from "./Helper";
 import { Users } from "../hooks/types";
 
 export const KEY = {
+  token: "token",
   user: "user",
   deviceId: "deviceId",
   dealStatusBody: "dealStatusBody",
 };
 
 export class StorageHelper {
+  static saveToken = async (token: string) => {
+    await AsyncStorage.setItem(KEY.token, token);
+  };
+
+  static getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem(KEY.token);
+      if (Helper.isNotEmpty(token)) {
+        return token!!;
+      }
+    } catch (error) {
+      console.log("Failed to parse token");
+    }
+    return "";
+  };
+
   static saveUser = async (user: Users | null) => {
     await AsyncStorage.setItem(KEY.user, JSON.stringify(user));
   };

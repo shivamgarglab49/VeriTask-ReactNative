@@ -1,8 +1,12 @@
 import { colors } from "./Constants";
-import { v4 as uuidv4 } from "uuid";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 export class Helper {
+  static getOs() {
+    if (Platform.OS === "android") return "Android";
+    if (Platform.OS === "ios") return "iOS";
+    return "";
+  }
   static async delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -71,24 +75,6 @@ export class Helper {
       return colors.fcl_status_success_300;
     }
     return colors.fcl_secondary_500;
-  };
-
-  static getUniqueId = async () => {
-    let deviceId: string | null = null;
-    try {
-      deviceId = await AsyncStorage.getItem("deviceId");
-      if (Helper.isEmpty(deviceId)) {
-        deviceId = uuidv4();
-      }
-      if (Helper.isEmpty(deviceId)) {
-        throw Error("Device id generation dev issue");
-      }
-      await AsyncStorage.setItem("deviceId", deviceId!!);
-      return deviceId;
-    } catch (error: any) {
-      console.log("Device id generation issue:- ", error);
-    }
-    throw Error("Device id generation dev issue");
   };
 
   static isNotEmpty(value: string | null | undefined): boolean {
