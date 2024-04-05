@@ -1,0 +1,56 @@
+name: Build Android APK
+on:
+  workflow_dispatch:
+    inputs:
+      localOrEAS:
+        type: choice
+        description: Please select the build area:-
+        default: EAS-NO-WAIT
+        required: true
+        options:
+          - EAS-NO-WAIT
+          - LOCAL
+          - EAS
+
+env:
+  ARTIFACT_PATH: ${{ github.workspace }}/Veritask-${{ github.run_number }}-${{ github.sha }}-${{ github.run_id }}.apk
+  EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
+
+jobs:
+  build:
+    name: Install and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: npm
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build area is "${{ github.event.inputs.localOrEAS }}"
+        run: |
+          if [ "${{ github.event.inputs.localOrEAS }}" = "EAS" ]; then
+            npx eas-cli build --profile preview --platform android
+          elif [ "${{ github.event.inputs.localOrEAS }}" = "EAS-NO-WAIT" ]; then
+            npx eas-cli build --profile preview --platform android --non-interactive --no-wait
+          elif [ "${{ github.event.inputs.localOrEAS }}" = "LOCAL" ]; then
+            npx eas-cli build --profile preview --platform android --local --output ${{ env.ARTIFACT_PATH }}
+          fi
+
+      - name: Upload APK iff Build area is "LOCAL"
+        id: artifact-upload-step
+        if: ${{ github.event.inputs.localOrEAS == 'LOCAL' }}
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ env.ARTIFACT_PATH }}
+
+      - name: Expo logout
+        run: npx expo logout
