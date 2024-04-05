@@ -38,7 +38,7 @@ jobs:
       - name: Build area is "${{ github.event.inputs.localOrEAS }}"
         run: |
           if [ "${{ github.event.inputs.localOrEAS }}" = "EAS" ]; then
-            npx eas-cli build --profile preview --platform android
+            npx eas-cli build --profile preview --platform android --non-interactive
           elif [ "${{ github.event.inputs.localOrEAS }}" = "EAS-NO-WAIT" ]; then
             npx eas-cli build --profile preview --platform android --non-interactive --no-wait
           elif [ "${{ github.event.inputs.localOrEAS }}" = "LOCAL" ]; then
