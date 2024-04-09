@@ -34,6 +34,6 @@
         "projectId": "72a8ec1c-f75a-499a-941e-643ffa514b71"
       }
     },
-    "plugins": ["@react-native-firebase/app"]
+    "plugins": []
   }
 }

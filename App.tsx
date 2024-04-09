@@ -5,7 +5,7 @@ import DealsComponent from "./screens/deal/DealsComponent";
 import UsersComponent from "./screens/users/UsersComponent";
 import DealDetailComponent from "./screens/details/DealDetailComponent";
 import ConfirmationComponent from "./screens/confirmation/ConfirmationComponent";
-import NotificationComponent from "./screens/commons/NotificationComp";
+// import NotificationComponent from "./screens/commons/NotificationComp";
 
 import { colors } from "./utils/Constants";
 import { StatusBar } from "expo-status-bar";
@@ -33,7 +33,6 @@ function App() {
         <StatusBar style="light" />
         <QueryClientProvider client={queryClient}>
           <NavigationContainer>
-            <NotificationComponent />
             <Stack.Navigator
               initialRouteName={currentUserState.user ? "Deals" : "Users"}
               screenOptions={{
